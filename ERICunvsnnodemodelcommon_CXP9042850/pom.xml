@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>un-vsn-node-model-common</artifactId>
+		<groupId>com.ericsson.oss.mediation.nrm.function</groupId>
+		<version>1.1.1-SNAPSHOT</version>
+	</parent>
+	
+	<artifactId>ERICunvsnnodemodelcommon_CXP9042850</artifactId>
+	<packaging>${rpm.packaging}</packaging>   
+	<name>[${project.parent.artifactId}] CXP module</name>
+
+  <properties>
+    <publish_artifact>true</publish_artifact>
+    <media.category>model</media.category>
+    <com.ericsson.oss.rpm.architecture>noarch</com.ericsson.oss.rpm.architecture>
+    <!-- Install path = /${rpm-root}/${comp-name}/${install-path} -->
+    <rpm-root>var/opt</rpm-root>
+	<rpm.name>${project.artifactId}</rpm.name>
+    <rpm.version>${project.version}</rpm.version>
+    <comp-name>ericsson</comp-name>
+    <install-path>ERICmodeldeployment/data/install</install-path>
+  </properties>
+	
+	<build>
+		<plugins>
+		<plugin>
+                <!--This copies the solution set xml from src/main/xml to
+                    target/resources Filtering is enabled which replaces any Maven properties
+                    in the file with their values -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>filter</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/resources</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources/xml</directory>
+                                    <includes>
+                                        <include>**.xml</include>
+                                    </includes>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>Copy JAR of UN-VSN Network Resource Model</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                        <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.ericsson.oss.mediation.nrm.function</groupId>
+                                    <artifactId>unmanaged-node-model-common-jar</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/opt/ericsson/un-vsn/models</outputDirectory>
+                                    <destFileName>unmanaged-node-model-common-jar-${project.version}.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.ericsson.oss.mediation.nrm.function</groupId>
+                                    <artifactId>virtualsubnetwork-node-model-common-jar</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/opt/ericsson/un-vsn/models</outputDirectory>
+                                    <destFileName>virtualsubnetwork-node-model-common-jar-${project.version}.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.ericsson.oss.mediation.nrm.function</groupId>
+                                    <artifactId>unmanaged-node-model-common-target-type-jar</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/opt/ericsson/un-vsn/models</outputDirectory>
+                                    <destFileName>unmanaged-node-model-common-target-type-jar-${project.version}.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.ericsson.oss.mediation.nrm.function</groupId>
+                                    <artifactId>virtualsubnetwork-node-model-common-target-type-jar</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target/opt/ericsson/un-vsn/models</outputDirectory>
+                                    <destFileName>virtualsubnetwork-node-model-common-target-type-jar-${project.version}.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+			<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>rpm-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration combine.self="override">
+                    <copyright>2017 Ericsson AB All rights reserved</copyright>
+                    <name>${rpm.name}</name>
+                    <versionProperty>${rpm.version}</versionProperty>
+                    <group>ERI-NMS</group>
+                    <vendor>Ericsson AB</vendor>
+                    <summary>un-vsn</summary>
+                    <mappings>
+                        <mapping>
+                            <directory>/${rpm-root}/${comp-name}/${install-path}</directory>
+                            <filemode>754</filemode>
+                            <username>mdtuser</username>
+                            <groupname>mdt</groupname>
+                            <configuration>false</configuration>
+                            <directoryIncluded>false</directoryIncluded>
+                            <recurseDirectories>true</recurseDirectories>
+                            <sources>
+                                <source>
+                                    <location>target/opt/ericsson/un-vsn/models</location>
+                                    <includes>
+                                        <include>**/*</include>
+                                    </includes>
+                                </source>
+                            </sources>
+                        </mapping>
+                    </mappings>
+                </configuration>
+            </plugin>
+			<plugin>
+				<groupId>com.ericsson.oss.itpf.deployment</groupId>
+				<artifactId>deployment-descriptor-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>configurable-entity</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<configEntity>
+						<stereotype>MODEL_PKG</stereotype>
+						<parameters>
+							<itemType name="model-package">
+								<property name="name" defaultValue="ERICunvsnnodemodelcommon_CXP9042850" />
+							</itemType>
+						</parameters>
+						<deploymentDependencies>
+                        </deploymentDependencies>
+					</configEntity>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

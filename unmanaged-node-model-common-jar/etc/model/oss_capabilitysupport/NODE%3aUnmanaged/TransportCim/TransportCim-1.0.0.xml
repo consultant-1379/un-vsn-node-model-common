@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CapabilitySupportDefinition
+        xmlns="urn:com:ericsson:schema:xml:oss:oss_capabilitysupport"
+        xmlns:oss_common="urn:com:ericsson:schema:xml:oss:oss_common"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        oss_common:ns="NODE:Unmanaged"
+        oss_common:name="TransportCim"
+        oss_common:version="1.0.0">
+
+    <oss_common:modelCreationInfo author="zmulasi" creationDate="2022-09-16">
+        <oss_common:designedModel componentId="Transport CIM Capabilities"/>
+    </oss_common:modelCreationInfo>
+
+    <oss_common:desc>Transport CIM Capability Support for Unmanaged node target type</oss_common:desc>
+
+    <capability name="NormalizedModelSupported" value="true"/>
+
+    <capability name="LinkGroupConfigurationSupported" value="true"/>
+
+</CapabilitySupportDefinition>
